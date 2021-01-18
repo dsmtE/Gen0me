@@ -25,7 +25,7 @@ const heightfieldParameters: HeightfieldParameters = {
     minHeight: - 2,
 };
 
-export class Simulation {
+export class HeightfieldSimulation {
 
     private container: HTMLElement;
     // Global variables
@@ -53,9 +53,8 @@ export class Simulation {
 
     private time: number = 0;
     private objectTimePeriod: number = 3;
-    private readonly maxNumObjects = 30;
-
     private timeNextSpawn = this.time + this.objectTimePeriod;
+    private readonly maxNumObjects = 30;
 
     constructor(container: HTMLElement) {
         this.container = container;

@@ -1,26 +1,21 @@
 <script>
   import {onMount} from 'svelte';
   import AmmoLib from 'three/examples/js/libs/ammo.wasm';
-  import { Simulation } from './ts/Simulation.ts'
+  import { CarSimulation } from './ts/CarSimulation.ts'
   
+  // Properties
   export let title;
   let count = 0;
+  
+  let carSimulation;
+
   onMount(() => {
-    
-    // console.log('Ammo', AmmoLib);
     AmmoLib().then(function (ammoLib) {
-      
-      // console.log('AmmoLib', ammoLib);
       Ammo = ammoLib;
-      const simulation = new Simulation(document.getElementById('container'), Ammo);
-
+      carSimulation = new CarSimulation(document.getElementById('container'), Ammo);
     });
-
-    const interval = setInterval(() => count++, 1000);
-    return () => {
-      clearInterval(interval);
-    };
   });
+
 </script>
 
 <style>
