@@ -5,7 +5,6 @@
   
   // Properties
   export let title;
-  let count = 0;
   
   let carSimulation;
 
@@ -14,7 +13,20 @@
       Ammo = ammoLib;
       carSimulation = new CarSimulation(document.getElementById('container'), Ammo);
     });
+
+    // add interval for svelte reactivity (update property for reactivity in object)
+    const interval = setInterval(() => {
+      carSimulation.speed = carSimulation.speed;
+    }, 10);
+
+    return () => { clearInterval(interval); };
   });
+
+  const precisionRound = (x, round) => (Math.round(x*10**round)/10**round).toFixed(round)
+  $: speedText = `${precisionRound(carSimulation ? carSimulation.speed: 0,2)} km/h`;
+  $:  if (carSimulation && carSimulation.speed >= 60) {
+	      console.log(`Wow ! ${speedText}`);
+      }
 
 </script>
 
@@ -26,7 +38,9 @@
 <div class="center">
   <div>
     <h1>{title}</h1>
-    <p>Page has been open for {count} seconds.</p>
+    {#if carSimulation}
+      <p>  {speedText} </p>
+    {/if}
   </div>
 </div>
 <div id="container"></div>
