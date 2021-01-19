@@ -68,12 +68,17 @@ export class CarSimulation {
     // private readonly maxNumObjects = 30;
 
     // Keybord actions
-    private actions: { [key:string]:boolean; } = {};
+    public actions: { [key:string]:boolean; } = {
+        'acceleration': false,
+        'braking': false,
+        'left': false,
+        'right': false,
+    };
     private keysActions : { [key:string]:string; } = {
         "KeyW":'acceleration',
         "KeyS":'braking',
         "KeyA":'left',
-        "KeyD":'right'
+        "KeyD":'right',
     };
     
     public speed: number = 0.11;
