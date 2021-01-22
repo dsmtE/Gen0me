@@ -1,6 +1,6 @@
 import { CarSimulation } from './CarSimulation'
 
-interface DistanceToObstacles {
+interface DistancesToObstacles {
     front: number,
     left: number,
     right: number,
@@ -33,12 +33,7 @@ class CarAI {
     }
 
     update(carSimulation: CarSimulation) {
-        //const distances: DistanceToObstacles = carSimulation.getDistToObstacles()
-        const distances: DistanceToObstacles = {
-            front: 0.,
-            left: 1.,
-            right: 0.,
-        }
+        const distances = carSimulation.getDistToObstacles()
         Object.keys(carSimulation.actions).forEach((key) => {
             carSimulation.actions[key] = this.actionsActivations[key].eval(
                 distances.front,
@@ -47,6 +42,12 @@ class CarAI {
             )
         })
     }
+
+    fitness(carSimulation: CarSimulation): number {
+        // return carSimulation.car.position.x
+        return 0;
+    }
 }
 
 export { CarAI }
+export type { DistancesToObstacles }

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import Stats from 'three/examples/js/libs/stats.min';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-
+import type { DistancesToObstacles } from './CarAI' 
 
 const carProperties = {
     // Vehicle contants
@@ -80,6 +80,14 @@ export class CarSimulation {
         "KeyA":'left',
         "KeyD":'right',
     };
+
+    public getDistToObstacles(): DistancesToObstacles {
+        return {
+            front: 0.,
+            left: 1.,
+            right: 0.,
+        }
+    }
     
     public speed: number = 0.11;
 
