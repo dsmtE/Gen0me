@@ -147,7 +147,6 @@ export class CarSimulation {
         this.initPhysics();
         this.createObjects();
         this.registerListener();
-        this.update();
     }
 
     private registerListener() : void {
@@ -401,14 +400,13 @@ export class CarSimulation {
         this.renderer.render(this.scene, this.camera);  // render the scene
     }
 
-    private update(): void {
+    public update(): void {
         const deltaTime = this.clock.getDelta();
         this.updatePhysics(deltaTime); // run physics
         this.controls.update();
         this.render();
         this.stats.update();
         this.time += deltaTime;
-        requestAnimationFrame(()=> this.update());
     }
 }
 

@@ -51,5 +51,5 @@ class CarAI {
     }
 }
 
-export { CarAI }
-export type { DistancesToObstacles }
+export default CarAI;
+export type { DistancesToObstacles };
