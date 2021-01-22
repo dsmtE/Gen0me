@@ -2,23 +2,25 @@
   import {onMount} from 'svelte';
   import AmmoLib from 'three/examples/js/libs/ammo.wasm';
   import { CarSimulation } from './ts/CarSimulation.ts'
-  import { car_AI_update } from './ts/CarAI.ts'
+  import { CarAI } from './ts/CarAI.ts'
   
   // Properties
   export let title;
   
   let carSimulation;
+  let carAI;
 
   onMount(() => {
     AmmoLib().then(function (ammoLib) {
       Ammo = ammoLib;
       carSimulation = new CarSimulation(document.getElementById('container'), Ammo);
+      carAI = new CarAI(carSimulation);
     });
 
     // add interval for svelte reactivity (update property for reactivity in object)
     const interval = setInterval(() => {
       carSimulation.speed = carSimulation.speed;
-      car_AI_update(carSimulation);
+      carAI.update(carSimulation);
     }, 10);
 
     return () => { clearInterval(interval); };
