@@ -27,6 +27,7 @@ export class Game {
 
     private update(): void {
         this.carSimulation.update();
+        const distances = this.carSimulation.getDistToObstacles();
         // this.carAI.update(this.carSimulation);
         this.stats.update();
         requestAnimationFrame(()=> this.update());

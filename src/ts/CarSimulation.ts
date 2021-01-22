@@ -42,6 +42,7 @@ export class CarSimulation {
 
     private container: HTMLElement;
     private stats: Stats;
+
     // Global variables
     private scene: THREE.Scene;
     private renderer:THREE.WebGLRenderer;
@@ -59,6 +60,11 @@ export class CarSimulation {
 
     private static zeroQuaternion = new THREE.Quaternion(0, 0, 0, 1);
 
+
+    private raycaster: THREE.Raycaster;
+
+    private chassisMesh: THREE.Mesh; // 
+
     // private heightData: Float32Array;
     // private ammoHeightData;
 
@@ -74,20 +80,13 @@ export class CarSimulation {
         'left': false,
         'right': false,
     };
+
     private keysActions : { [key:string]:string; } = {
         "KeyW":'acceleration',
         "KeyS":'braking',
         "KeyA":'left',
         "KeyD":'right',
     };
-
-    public getDistToObstacles(): DistancesToObstacles {
-        return {
-            front: 0.,
-            left: 1.,
-            right: 0.,
-        }
-    }
     
     public speed: number = 0.11;
 
@@ -110,7 +109,11 @@ export class CarSimulation {
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.2, 2000);
         
         this.clock = new THREE.Clock();
-        
+
+        this.raycaster= new THREE.Raycaster();
+        this.raycaster.far = 75;
+        this.raycaster.near = 5;
+
         this.syncList = [];
         
         //stat
@@ -180,8 +183,63 @@ export class CarSimulation {
         return false;
     }
 
-    private initPhysics(): void {
+    public getDistToObstacles(): DistancesToObstacles {
 
+        let dist = { front: 0, left: 1., right: 0. };
+
+        const verticalAxis = new THREE.Vector3(0, 1, 0);
+        const position = this.chassisMesh.position;
+        const dirFront = new THREE.Vector3(0,0,1).applyQuaternion(this.chassisMesh.quaternion);
+        
+        const dirLeft = dirFront.clone().applyAxisAngle( verticalAxis, Math.PI/12 );
+        const dirRight = dirFront.clone().applyAxisAngle( verticalAxis, -Math.PI/12 );
+
+        this.raycaster.set(position, dirFront);
+        const intersectsFront = this.raycaster.intersectObjects(this.scene.children);
+
+        this.raycaster.set(position, dirLeft);
+        const intersectsLeft = this.raycaster.intersectObjects(this.scene.children);
+
+        this.raycaster.set(position, dirRight);
+        const intersectsRight = this.raycaster.intersectObjects(this.scene.children);
+        
+
+        // remove lines
+        let selectedObject = this.scene.getObjectByName("line");
+        while (selectedObject) {
+            this.scene.remove(selectedObject);
+            selectedObject = this.scene.getObjectByName("line");
+        }
+
+        const lineMat = new THREE.LineBasicMaterial({ color: 0xFF0000});
+        
+        const addLine = (from: THREE.Vector3, to: THREE.Vector3) => {
+            const geometry = new THREE.BufferGeometry().setFromPoints([from, to]);
+            const line = new THREE.Line(geometry, lineMat);
+            // line.position.y = position.y;
+            line.name = "line";
+            this.scene.add(line);
+        }
+
+        if(intersectsFront.length > 0) {
+            dist.front = position.distanceTo(intersectsFront[0].point);
+            addLine(position, intersectsFront[0].point);
+        }
+
+        if(intersectsLeft.length > 0) {
+            dist.front = position.distanceTo(intersectsLeft[0].point);
+            addLine(position, intersectsLeft[0].point);
+        }
+
+        if(intersectsRight.length > 0) {
+            dist.front = position.distanceTo(intersectsRight[0].point);
+            addLine(position, intersectsRight[0].point);
+        }
+
+        return dist;
+    }
+
+    private initPhysics(): void {
         // Physics configuration
         this.collisionConfiguration = new Ammo.btDefaultCollisionConfiguration();
         this.dispatcher = new Ammo.btCollisionDispatcher(this.collisionConfiguration);
@@ -263,8 +321,8 @@ export class CarSimulation {
         var body = new Ammo.btRigidBody(new Ammo.btRigidBodyConstructionInfo(carProperties.massVehicle, motionState, geometry, localInertia));
         body.setActivationState(DISABLE_DEACTIVATION);
         this.physicsWorld.addRigidBody(body);
-        const chassisMesh = this.createChassisMesh(carProperties.chassisWidth, carProperties.chassisHeight, carProperties.chassisLength);
-        this.scene.add(chassisMesh);
+        this.chassisMesh = this.createChassisMesh(carProperties.chassisWidth, carProperties.chassisHeight, carProperties.chassisLength);
+        this.scene.add(this.chassisMesh);
 
         // Raycast Vehicle
         var engineForce = 0;
@@ -369,8 +427,8 @@ export class CarSimulation {
             tm = vehicle.getChassisWorldTransform();
             p = tm.getOrigin();
             q = tm.getRotation();
-            chassisMesh.position.set(p.x(), p.y(), p.z());
-            chassisMesh.quaternion.set(q.x(), q.y(), q.z(), q.w());
+            this.chassisMesh.position.set(p.x(), p.y(), p.z());
+            this.chassisMesh.quaternion.set(q.x(), q.y(), q.z(), q.w());
         });
     }
 

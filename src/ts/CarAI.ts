@@ -35,7 +35,7 @@ class CarAI {
     }
 
     update(carSimulation: CarSimulation) {
-        const distances = carSimulation.getDistToObstacles()
+        const distances = carSimulation.getDistToObstacles();
         Object.keys(carSimulation.actions).forEach((key) => {
             carSimulation.actions[key] = this.actionsActivations[key].eval(
                 distances.front,
