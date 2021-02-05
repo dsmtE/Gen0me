@@ -392,11 +392,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 529435795}
   m_Mesh: {fileID: 2092906638}
---- !u!4 &551534070 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3137537921386370560, guid: fea40d16e073c0b45af3395eeaa5e15c, type: 3}
-  m_PrefabInstance: {fileID: 2063911135}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &955355383
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,12 +520,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621d5338747901d469b85e2284a0d047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 551534070}
+  target: {fileID: 1635982869}
   useInitial: 0
   offsetCamPosition: {x: 0, y: 5, z: -7}
   offsetCamRotation: {x: 0, y: 0, z: 0, w: 1}
   translateSpeed: 5
-  rotationSpeed: 3
+  rotationSpeed: 10
 --- !u!1 &1068200502
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +635,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cef8d5a8e18cd7a489801e066dbbff3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1635982869 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3137537921882263165, guid: fea40d16e073c0b45af3395eeaa5e15c, type: 3}
+  m_PrefabInstance: {fileID: 2063911135}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1666786658
 GameObject:
   m_ObjectHideFlags: 0
