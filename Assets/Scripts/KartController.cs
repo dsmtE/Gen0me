@@ -6,11 +6,6 @@ using UnityEngine;
 public class KartController : MonoBehaviour {
     private SpawnPointManager _spawnPointManager;
 
-    [SerializeField] private Controller controller = null;
-
-    private float forwardIn = 0;
-    private float turnIn = 0;
-
     public Transform kartModel;
     public Transform kartNormal;
     public Rigidbody sphere;
@@ -33,15 +28,10 @@ public class KartController : MonoBehaviour {
     public Transform backWheels;
     public Transform steeringWheel;
 
-    private float correctedTurn => turnIn * (1f - Mathf.Exp(-sphere.velocity.magnitude / 4f));
+    private float CorrectedTurn(float turn) { return turn * (1f - Mathf.Exp(-sphere.velocity.magnitude / 4f)); }
 
     public void Awake() {
         _spawnPointManager = FindObjectOfType<SpawnPointManager>();
-    }
-
-    private void GetInputFromController(Controller c) {
-        forwardIn = c.forward;
-        turnIn = c.turn;
     }
 
     public void ApplyAcceleration(float input) {
@@ -51,11 +41,11 @@ public class KartController : MonoBehaviour {
             currentSpeed = Mathf.SmoothStep(currentSpeed, 0f, Time.deltaTime * 12f * (1 + bakingForce * Mathf.Abs(input)) );
         }
 
-        currentRotate = Mathf.Lerp(currentRotate, rotate, Time.deltaTime * 4f);
-        rotate = 0f;
+        currentRotate = Mathf.Lerp(currentRotate, steering * CorrectedTurn(rotate), Time.deltaTime * 4f);
+        rotate *= 0.8f;
     }
 
-    public void AnimateKart(float input) {
+    private void AnimateKart(float input) {
         kartModel.localEulerAngles = Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, 90 + (input * 15), kartModel.localEulerAngles.z), .2f);
 
         frontWheels.localEulerAngles = new Vector3(0, (input * 15), frontWheels.localEulerAngles.z);
@@ -71,15 +61,9 @@ public class KartController : MonoBehaviour {
         transform.position = pos;
     }
     void Update() {
-       
-        if (controller) {
-            GetInputFromController(controller);
-            ApplyAcceleration(forwardIn);
-            Steer(correctedTurn);
-        }
-
+  
         //Animations 
-        AnimateKart(correctedTurn);
+        AnimateKart(CorrectedTurn(rotate));
     }
 
     public void FixedUpdate() {
@@ -103,9 +87,7 @@ public class KartController : MonoBehaviour {
     }
 
     public void Steer(float steeringSignal) {
-        // int steerDirection = steeringSignal > 0 ? 1 : -1;
-        // float steeringStrength = Mathf.Abs(steeringSignal);
 
-        rotate = steering * steeringSignal;
+        rotate = steeringSignal;
     }
 }
