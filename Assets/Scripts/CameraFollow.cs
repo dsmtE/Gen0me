@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
 
-    [SerializeField] private Transform target;
+    [SerializeField] private Transform target = null;
 
     [Tooltip("Use scene's current setup for offset.")]
     public bool useInitial = false;
@@ -13,19 +13,21 @@ public class CameraFollow : MonoBehaviour {
     [SerializeField] private Vector3 offsetCamPosition = Vector3.zero;
     [SerializeField] private Quaternion offsetCamRotation = Quaternion.identity;
 
-    [SerializeField] private float translateSpeed;
-    [SerializeField] private float rotationSpeed;
+    [SerializeField] private float translateSpeed = 5f;
+    [SerializeField] private float rotationSpeed = 5f;
 
     void Start() {
-        if (useInitial) {
+        if (target && useInitial) {
             offsetCamPosition = transform.position - target.transform.position;
             offsetCamRotation = transform.rotation;
         }
     }
 
     private void FixedUpdate() {
-        HandleTranslation();
-        HandleRotation();
+        if(target) {
+            HandleTranslation();
+            HandleRotation();
+        }
     }
 
     private void HandleTranslation() {

@@ -6,7 +6,7 @@ using UnityEngine;
 public class KartController : MonoBehaviour {
     private SpawnPointManager _spawnPointManager;
 
-    [SerializeField] private Controller controller;
+    [SerializeField] private Controller controller = null;
 
     private float forwardIn = 0;
     private float turnIn = 0;
