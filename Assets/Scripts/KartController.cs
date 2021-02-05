@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +15,7 @@ public class KartController : MonoBehaviour {
     [Range(0f, 10f)]
     public float bakingForce = 1f;
 
+    private Vector3 sphereOffsetPosition;
     [Header("Parameters")]
     public float acceleration = 10f;
     public float steering = 10f;
@@ -28,23 +29,23 @@ public class KartController : MonoBehaviour {
 
     private float CorrectedTurn(float turn) { return turn * (1f - Mathf.Exp(-sphere.velocity.magnitude / 4f)); }
 
+    public void Awake() {
+        sphereOffsetPosition = sphere.transform.localPosition;
+    }
+
     public void ApplyAcceleration(float input) {
         if(input > 0f) {
             currentSpeed = Mathf.SmoothStep(currentSpeed, input * maxSpeed, Time.deltaTime * acceleration);
         }else { // brake
             currentSpeed = Mathf.SmoothStep(currentSpeed, 0f, Time.deltaTime * 12f * (1 + bakingForce * Mathf.Abs(input)) );
         }
-
-        currentRotate = Mathf.Lerp(currentRotate, steering * CorrectedTurn(rotate), Time.deltaTime * 4f);
-        rotate *= 0.8f;
     }
 
     private void AnimateKart(float input) {
-        kartModel.localEulerAngles = Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, 90 + (input * 15), kartModel.localEulerAngles.z), .2f);
-
-        frontWheels.localEulerAngles = new Vector3(0, (input * 15), frontWheels.localEulerAngles.z);
-        frontWheels.localEulerAngles += new Vector3(0, 0, sphere.velocity.magnitude / 20);
-        backWheels.localEulerAngles += new Vector3(0, 0, sphere.velocity.magnitude / 20);
+        kartModel.localEulerAngles = new Vector3(0f, (input * 20f), 0f);
+        frontWheels.localEulerAngles = new Vector3(0f, (input * 15f), frontWheels.localEulerAngles.z);
+        frontWheels.localEulerAngles += new Vector3(0f, 0f, sphere.velocity.magnitude / 2f);
+        backWheels.localEulerAngles += new Vector3(0f, 0f, sphere.velocity.magnitude / 2f);
 
         steeringWheel.localEulerAngles = new Vector3(-25, 90, ((input * 45)));
     }
@@ -55,23 +56,22 @@ public class KartController : MonoBehaviour {
         transform.position = sphere.transform.position;
     }
     void Update() {
-  
         //Animations 
-        AnimateKart(CorrectedTurn(rotate));
+        AnimateKart(currentRotate / 20f);
     }
 
     public void FixedUpdate() {
-        sphere.AddForce(-kartModel.transform.right * currentSpeed, ForceMode.Acceleration);
+
+        sphere.AddForce(-kartNormal.transform.right * currentSpeed, ForceMode.Acceleration);
         
         //Gravity
         sphere.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
 
         //Follow Collider
-        transform.position = sphere.transform.position;
+        transform.position = sphere.transform.position - sphereOffsetPosition;
 
         //Steering
         transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0), Time.deltaTime * 5f);
-
         Physics.Raycast(transform.position + (transform.up * .1f), Vector3.down, out RaycastHit hitOn, 1.1f, layerMask);
         Physics.Raycast(transform.position + (transform.up * .1f), Vector3.down, out RaycastHit hitNear, 2.0f, layerMask);
 
@@ -82,6 +82,7 @@ public class KartController : MonoBehaviour {
 
     public void Steer(float steeringSignal) {
         rotate = steeringSignal;
+        currentRotate = Mathf.Lerp(currentRotate, steering * CorrectedTurn(rotate), Time.deltaTime * 4f);
     }
 
     public float getFitness() {
