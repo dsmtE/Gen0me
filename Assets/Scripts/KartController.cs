@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class KartController : MonoBehaviour {
-    private SpawnPointManager _spawnPointManager;
-
     public Transform kartModel;
     public Transform kartNormal;
     public Rigidbody sphere;
@@ -30,10 +28,6 @@ public class KartController : MonoBehaviour {
 
     private float CorrectedTurn(float turn) { return turn * (1f - Mathf.Exp(-sphere.velocity.magnitude / 4f)); }
 
-    public void Awake() {
-        _spawnPointManager = FindObjectOfType<SpawnPointManager>();
-    }
-
     public void ApplyAcceleration(float input) {
         if(input > 0f) {
             currentSpeed = Mathf.SmoothStep(currentSpeed, input * maxSpeed, Time.deltaTime * acceleration);
@@ -55,10 +49,10 @@ public class KartController : MonoBehaviour {
         steeringWheel.localEulerAngles = new Vector3(-25, 90, ((input * 45)));
     }
 
-    public void Respawn() {
-        Vector3 pos = _spawnPointManager.SelectRandomSpawnpoint();
-        sphere.MovePosition(pos);
-        transform.position = pos;
+    public void Respawn(Transform spawnPointTransform) {
+        sphere.MovePosition(spawnPointTransform.position);
+        sphere.MoveRotation(spawnPointTransform.rotation);
+        transform.position = sphere.transform.position;
     }
     void Update() {
   
@@ -87,7 +81,10 @@ public class KartController : MonoBehaviour {
     }
 
     public void Steer(float steeringSignal) {
-
         rotate = steeringSignal;
+    }
+
+    public float getFitness() {
+        return 0f;
     }
 }
