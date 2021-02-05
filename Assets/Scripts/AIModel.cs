@@ -27,6 +27,7 @@ public class Layer {
             {
                 res[j] += x[i] * coefficients[i];
             }
+            res[j] = Mathf.Atan(res[j]) / (Mathf.PI / 2);
         }
         return res;
     }

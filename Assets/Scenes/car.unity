@@ -915,7 +915,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4790804414385134319, guid: fea40d16e073c0b45af3395eeaa5e15c, type: 3}
       propertyPath: raysPerDirection
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fea40d16e073c0b45af3395eeaa5e15c, type: 3}
