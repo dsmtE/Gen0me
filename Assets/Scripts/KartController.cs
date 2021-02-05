@@ -15,14 +15,16 @@ public class KartController : MonoBehaviour {
     public Transform kartNormal;
     public Rigidbody sphere;
 
-    float speed, currentSpeed;
-    float rotate, currentRotate;
+    public float maxSpeed = 20f;
+    private float currentSpeed = 0;
+    private float rotate;
+    private float currentRotate;
     [Range(0f, 10f)]
-    float bakingForce = 1f;
+    public float bakingForce = 1f;
 
     [Header("Parameters")]
-    public float acceleration = 30f;
-    public float steering = 80f;
+    public float acceleration = 10f;
+    public float steering = 10f;
     public float gravity = 10f;
     public LayerMask layerMask;
 
@@ -31,8 +33,7 @@ public class KartController : MonoBehaviour {
     public Transform backWheels;
     public Transform steeringWheel;
 
-    // private float correctedTurn => turnIn * Mathf.Sqrt(Mathf.Abs(forwardIn));
-    private float correctedTurn => turnIn * (1f - Mathf.Exp(-sphere.velocity.magnitude));
+    private float correctedTurn => turnIn * (1f - Mathf.Exp(-sphere.velocity.magnitude / 4f));
 
     public void Awake() {
         _spawnPointManager = FindObjectOfType<SpawnPointManager>();
@@ -45,11 +46,9 @@ public class KartController : MonoBehaviour {
 
     public void ApplyAcceleration(float input) {
         if(input > 0f) {
-            speed = acceleration * input;
-            currentSpeed = Mathf.SmoothStep(currentSpeed, speed, Time.deltaTime * 12f);
-            speed = 0f;
+            currentSpeed = Mathf.SmoothStep(currentSpeed, input * maxSpeed, Time.deltaTime * acceleration);
         }else { // brake
-            currentSpeed = Mathf.SmoothStep(currentSpeed, 0, Time.deltaTime * 12f * (1 + bakingForce * Mathf.Abs(input)) );
+            currentSpeed = Mathf.SmoothStep(currentSpeed, 0f, Time.deltaTime * 12f * (1 + bakingForce * Mathf.Abs(input)) );
         }
 
         currentRotate = Mathf.Lerp(currentRotate, rotate, Time.deltaTime * 4f);
@@ -60,8 +59,8 @@ public class KartController : MonoBehaviour {
         kartModel.localEulerAngles = Vector3.Lerp(kartModel.localEulerAngles, new Vector3(0, 90 + (input * 15), kartModel.localEulerAngles.z), .2f);
 
         frontWheels.localEulerAngles = new Vector3(0, (input * 15), frontWheels.localEulerAngles.z);
-        frontWheels.localEulerAngles += new Vector3(0, 0, sphere.velocity.magnitude / 2);
-        backWheels.localEulerAngles += new Vector3(0, 0, sphere.velocity.magnitude / 2);
+        frontWheels.localEulerAngles += new Vector3(0, 0, sphere.velocity.magnitude / 20);
+        backWheels.localEulerAngles += new Vector3(0, 0, sphere.velocity.magnitude / 20);
 
         steeringWheel.localEulerAngles = new Vector3(-25, 90, ((input * 45)));
     }
@@ -69,7 +68,7 @@ public class KartController : MonoBehaviour {
     public void Respawn() {
         Vector3 pos = _spawnPointManager.SelectRandomSpawnpoint();
         sphere.MovePosition(pos);
-        transform.position = pos - new Vector3(0, 0.4f, 0);
+        transform.position = pos;
     }
     void Update() {
        
@@ -90,7 +89,7 @@ public class KartController : MonoBehaviour {
         sphere.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
 
         //Follow Collider
-        transform.position = sphere.transform.position - new Vector3(0, 0.4f, 0);
+        transform.position = sphere.transform.position;
 
         //Steering
         transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, new Vector3(0, transform.eulerAngles.y + currentRotate, 0), Time.deltaTime * 5f);
@@ -104,9 +103,9 @@ public class KartController : MonoBehaviour {
     }
 
     public void Steer(float steeringSignal) {
-        int steerDirection = steeringSignal > 0 ? 1 : -1;
-        float steeringStrength = Mathf.Abs(steeringSignal);
+        // int steerDirection = steeringSignal > 0 ? 1 : -1;
+        // float steeringStrength = Mathf.Abs(steeringSignal);
 
-        rotate = (steering * steerDirection) * steeringStrength;
+        rotate = steering * steeringSignal;
     }
 }
