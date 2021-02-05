@@ -12,6 +12,7 @@ public class KartBrain : MonoBehaviour {
     private void Awake() {
         kartController = GetComponent<KartController>();
         rayCastSensors = GetComponent<RayCastSensors>();
+        rayCastSensors.RaysNumber = 3;
     }
 
     private void Update() {
