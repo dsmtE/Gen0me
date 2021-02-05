@@ -8,12 +8,16 @@ public class KartBrain : MonoBehaviour {
 
     [HideInInspector]
     public KartController kartController;
-    public RayCastSensors rayCastSensors;
+    private RayCastSensors rayCastSensors;
+
+    private AIModel aiModel;
 
     private void Awake() {
         kartController = GetComponent<KartController>();
         rayCastSensors = GetComponent<RayCastSensors>();
-        aiModel = new AIModel();
+        rayCastSensors.RaysNumber = 3;
+        int intermediateLayerDimension = 4;
+        aiModel = new AIModel(rayCastSensors.RaysNumber, intermediateLayerDimension);
     }
 
     private void Update() {
@@ -23,5 +27,5 @@ public class KartBrain : MonoBehaviour {
         kartController.Steer(output[1]);
     }
 
-    private AIModel aiModel;
+    
 }

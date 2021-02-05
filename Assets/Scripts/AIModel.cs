@@ -38,10 +38,10 @@ public class Layer {
 
 public class AIModel
 {
-    public AIModel()
+    public AIModel(int inputDimension, int intermediateLayerDimension)
     {
-        layer1 = new Layer(3, 4);
-        layer2 = new Layer(4, 2);
+        layer1 = new Layer(inputDimension, intermediateLayerDimension);
+        layer2 = new Layer(intermediateLayerDimension, 2);
     }
 
     public float[] eval(float[] raycastDistances) {

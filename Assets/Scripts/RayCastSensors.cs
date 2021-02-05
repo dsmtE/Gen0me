@@ -41,10 +41,25 @@ public class RayCastSensors : MonoBehaviour {
         public Vector3 direction;
     }
 
+    public int RaysNumber {
+        get { return 2 * raysPerDirection + 1; }
+        set {
+            if(value >= 1) {
+                if (value % 2 != 0) Debug.Log("RayNumber must be odd. (it has been rounded down)");
+                raysPerDirection = (value - 1) / 2;
+            }else {
+                raysPerDirection = 0;
+                Debug.Log("[Warning] RayNumber can't be less than one.");
+            }
+            raysPerDirection = (value > 1 && value%2 == 0) ? (value-1)/2 : 1;
+            
+        }
+    }
+
     private float[] GetRayAngles(int raysPerDirection, float maxRayDegrees) {
         // Example:
         // { 90, 90 - delta, 90 + delta, 90 - 2*delta, 90 + 2*delta }
-        var anglesOut = new float[2 * raysPerDirection + 1];
+        var anglesOut = new float[RaysNumber];
         var delta = maxRayDegrees / raysPerDirection;
         anglesOut[0] = 90f;
         for (var i = 0; i < raysPerDirection; i++) {
@@ -55,7 +70,7 @@ public class RayCastSensors : MonoBehaviour {
     }
 
     public HitInformation[] GetHitInformations() {
-        HitInformation[] hitInformations = new HitInformation[2 * raysPerDirection + 1];
+        HitInformation[] hitInformations = new HitInformation[RaysNumber];
 
         Vector3 startPos = transform.TransformPoint(startOffset);
         float[] raysAngles = GetRayAngles(raysPerDirection, maxRayDegrees);
