@@ -20,19 +20,15 @@ public class TrainingManager : MonoBehaviour {
         brainsList = new KartBrain[entitiesNumber];
 
         for(int i = 0; i < entitiesNumber; ++i) {
-
-            Transform sp = SelectRandomSpawnpoint();
-
-            GameObject go = Instantiate(kartPrefab, sp.position, sp.rotation);
-            go.transform.parent = transform;
-
-            go.transform.localScale = Vector3.one;
-            brainsList[i] = go.GetComponent<KartBrain>();
+            GameObject go = Instantiate(kartPrefab, Vector3.zero, Quaternion.identity);
+            go.transform.parent = gameObject.transform;
+            brainsList[i] = go.GetComponentInChildren<KartBrain>();
         }
     }
     public void SpawnKart() {
         foreach (KartBrain kb in brainsList) {
-            kb.kartController.Respawn(SelectRandomSpawnpoint());
+            Transform sp = SelectRandomSpawnpoint();
+            kb.kartController.Respawn(sp.position, sp.rotation);
         }  
     }
 

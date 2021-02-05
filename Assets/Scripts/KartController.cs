@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,10 +50,9 @@ public class KartController : MonoBehaviour {
         steeringWheel.localEulerAngles = new Vector3(-25, 90, ((input * 45)));
     }
 
-    public void Respawn(Transform spawnPointTransform) {
-        sphere.MovePosition(spawnPointTransform.position);
-        sphere.MoveRotation(spawnPointTransform.rotation);
-        transform.position = sphere.transform.position;
+    public void Respawn(Vector3 position, Quaternion rotation) {
+        sphere.transform.position = position;
+        transform.rotation = rotation;
     }
     void Update() {
         //Animations 
