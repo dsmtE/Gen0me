@@ -61,6 +61,8 @@ public class TrainingManager : MonoBehaviour {
 			brainsList[i].aiModel = AIModel.Crossover(parent1.aiModel, parent2.aiModel);
 
 			brainsList[i].MutateModel(mutationRate, mutationStrength);
+
+			brainsList[i].ResetFitness();
 		}
 
         // Mutate all

@@ -14,7 +14,7 @@ public class AIFitness
         Reset();
     }
 
-    void Reset()
+    public void Reset()
     {
         validatedCheckpoints = new int[_nbCheckpoints]; // Initialized to 0
         malus = 0;

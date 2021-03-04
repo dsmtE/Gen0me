@@ -10,6 +10,7 @@ public class KartBrain : MonoBehaviour {
 
     public AIModel aiModel;
     public float Fitness => aiFitness.computeScore();
+    public void ResetFitness() => aiFitness.Reset();
 
     private void Awake() {
         kartController = GetComponent<KartController>();
