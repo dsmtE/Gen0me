@@ -4,27 +4,33 @@ using UnityEngine;
 
 public class AIFitness
 {
-    private bool[] validatedCheckpoints;
+    private int[] validatedCheckpoints;
 
     public AIFitness(int nbCheckpoints)
     {
-        validatedCheckpoints = new bool[nbCheckpoints]; // Initialized to false
+        validatedCheckpoints = new int[nbCheckpoints]; // Initialized to 0
     }
 
     public void valideCheckpoint(int index)
     {
-        validatedCheckpoints[index] = true;
+        if (index == 0)
+        {
+            if (validatedCheckpoints[validatedCheckpoints.Length - 1] == validatedCheckpoints[0])
+                validatedCheckpoints[0]++;
+        }
+        else
+        {
+            if (validatedCheckpoints[index-1] == validatedCheckpoints[index] + 1)
+                validatedCheckpoints[index]++;
+        }
     }
 
    public float computeScore()
     {
         float score = 0;
-        foreach (bool b in validatedCheckpoints)
+        foreach (int nb_laps in validatedCheckpoints)
         {
-            if (b)
-            {
-                score += 1;
-            }
+            score += nb_laps;
         }
         return score;
     }
