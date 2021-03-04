@@ -17,8 +17,8 @@ public class KartBrain : MonoBehaviour {
         kartController = GetComponent<KartController>();
         rayCastSensors = GetComponent<RayCastSensors>();
         rayCastSensors.RaysNumber = 3;
-        int intermediateLayerDimension = 4;
-        aiModel = new AIModel(rayCastSensors.RaysNumber, intermediateLayerDimension);
+        int[] layersDim = new int[] { rayCastSensors.RaysNumber, 4, 2 };
+        aiModel = new AIModel(layersDim);
         aiFitness = new AIFitness(CheckpointManager.nbCheckpoints);
     }
 
