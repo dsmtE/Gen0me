@@ -6,10 +6,18 @@ public class AIFitness
 {
     private int[] validatedCheckpoints;
     private float malus = 0;
+    private int _nbCheckpoints;
 
     public AIFitness(int nbCheckpoints)
     {
-        validatedCheckpoints = new int[nbCheckpoints]; // Initialized to 0
+        _nbCheckpoints = nbCheckpoints;
+        Reset();
+    }
+
+    void Reset()
+    {
+        validatedCheckpoints = new int[_nbCheckpoints]; // Initialized to 0
+        malus = 0;
     }
 
     public void valideCheckpoint(int index)
