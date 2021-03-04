@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -41,7 +41,7 @@ public class KartBrain : MonoBehaviour {
 
     public void MutateModel(float mutationRate = 0.1f, float mutationStrength = 0.1f) => aiModel.Mutate(mutationRate, mutationStrength);
 
-    public static int CompareFitness(KartBrain a, KartBrain b) => (a.Fitness > b.Fitness) ? 1 : ((a.Fitness < b.Fitness) ? -1 : 0);
+    public static int CompareFitness(KartBrain a, KartBrain b) => (a.Fitness > b.Fitness) ? -1 : ((a.Fitness < b.Fitness) ? 1 : 0);
 
     private RayCastSensors rayCastSensors;
     private AIFitness aiFitness;
