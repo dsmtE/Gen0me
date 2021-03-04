@@ -44,6 +44,7 @@ public class RayCastSensors : MonoBehaviour {
     public int RaysNumber {
         get { return 2 * raysPerDirection + 1; }
         set {
+
             if(value >= 1) {
                 if (value % 2 == 0) Debug.Log("RayNumber must be odd. (it has been rounded down)");
                 raysPerDirection = (value - 1) / 2;
@@ -51,8 +52,7 @@ public class RayCastSensors : MonoBehaviour {
                 raysPerDirection = 0;
                 Debug.Log("[Warning] RayNumber can't be less than one.");
             }
-            raysPerDirection = (value > 1 && value%2 == 0) ? (value-1)/2 : 1;
-            
+            Debug.LogFormat("raysPerDirection: {0} from value : {1}", raysPerDirection, value);
         }
     }
 
