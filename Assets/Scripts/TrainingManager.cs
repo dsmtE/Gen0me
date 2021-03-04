@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +10,8 @@ public class TrainingManager : MonoBehaviour {
 
 	public float mutationRate = 0.1f;
 	public float mutationStrength = 0.1f;
+
+	[Tooltip("in seconds")] public float trainingTime = 10.0f;
 
 	[SerializeField] private GameObject kartPrefab;
 
@@ -28,17 +30,25 @@ public class TrainingManager : MonoBehaviour {
 	}
 
     private void Start() {
+		genertionStartTime = Time.time;
         SpawnKart();
-    }
 
-	private void SpawnKart() {
+	}
+
+    private void FixedUpdate() {
+		if (Time.time - genertionStartTime > trainingTime) {
+			NewGeneration();
+		}
+	}
+
+    private void SpawnKart() {
 		foreach (KartBrain kb in brainsList) {
 			Transform sp = SelectRandomSpawnpoint();
 			kb.kartController.Respawn(sp.position, sp.rotation);
 		}
 	}
 
-	public void NewGeneration(int numNewDNA = 0) {
+	public void NewGeneration() {
 
 		// sort by fitness
 		brainsList.Sort(KartBrain.CompareFitness);
@@ -58,6 +68,7 @@ public class TrainingManager : MonoBehaviour {
 
 		++generation;
 
+		genertionStartTime = Time.time;
 		SpawnKart();
 	}
 
@@ -67,4 +78,5 @@ public class TrainingManager : MonoBehaviour {
 	private int generation;
 	private List<KartBrain> brainsList;
     private GameObject[] spawnPoints;
+	private float genertionStartTime;
 }
