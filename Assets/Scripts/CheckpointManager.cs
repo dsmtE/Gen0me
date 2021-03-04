@@ -1,19 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckpointManager : MonoBehaviour
-{
+public class CheckpointManager : MonoBehaviour {
     public static int nbCheckpoints = 200;
-    public GameObject checkpoint;
+    public GameObject checkpointPrefab;
     public CircuitMesh circuitMesh;
     public PathCreation.PathCreator pathCreator;
 
-    void Start()
-    {
-        for (int i = 0; i < nbCheckpoints; ++i)
-        {
-            var obj = Instantiate(checkpoint);
+
+    void Start() {
+        for (int i = 0; i < nbCheckpoints; ++i) {
+            GameObject obj = Instantiate(checkpointPrefab);
             obj.transform.parent = gameObject.transform;
             obj.GetComponent<Checkpoint>().index = i;
             obj.transform.localScale = new Vector3(circuitMesh.roadWidth * 3.0f, 1, 1);
