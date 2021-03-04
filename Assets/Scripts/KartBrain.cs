@@ -18,7 +18,7 @@ public class KartBrain : MonoBehaviour {
         rayCastSensors.RaysNumber = 2*6+1;
         int[] layersDim = new int[] { rayCastSensors.RaysNumber, 10, 5, 2 };
         aiModel = new AIModel(layersDim);
-        aiFitness = new AIFitness(CheckpointManager.nbCheckpoints);
+        aiFitness = new AIFitness();
     }
 
     private void Update() {
