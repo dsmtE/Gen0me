@@ -11,9 +11,9 @@ public class Checkpoint : MonoBehaviour
         
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider oCollider)
     {
-        var kartBrain = collision.transform.parent.gameObject.GetComponentInChildren<KartBrain>();
+        var kartBrain = oCollider.transform.parent.gameObject.GetComponentInChildren<KartBrain>();
         if (kartBrain != null)
         {
             kartBrain.ValidateCheckpoint(index);
