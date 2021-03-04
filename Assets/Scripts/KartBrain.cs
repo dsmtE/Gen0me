@@ -6,12 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(KartController)), RequireComponent(typeof(RayCastSensors))]
 public class KartBrain : MonoBehaviour {
 
-    [HideInInspector]
-    public KartController kartController;
-    private RayCastSensors rayCastSensors;
+    [HideInInspector] public KartController kartController;
 
-    private AIModel aiModel;
-    private AIFitness aiFitness;
+    public AIModel aiModel;
+    public float Fitness => aiFitness.computeScore();
 
     private void Awake() {
         kartController = GetComponent<KartController>();
@@ -25,13 +23,18 @@ public class KartBrain : MonoBehaviour {
     private void Update() {
         var hits = rayCastSensors.GetHitInformations();
         var output = aiModel.eval(hits.Select(hit => hit.distance).ToArray());
-        kartController.ApplyAcceleration(output[0]*0.5f +0.5f);
+        kartController.ApplyAcceleration(output[0] * 0.5f + 0.5f);
         kartController.Steer(output[1]);
     }
 
-    public void ValidateCheckpoint(int checkpointIdx)
-    {
+    public void ValidateCheckpoint(int checkpointIdx) {
         aiFitness.valideCheckpoint(checkpointIdx);
     }
-    
+
+    public void MutateModel(float mutationRate = 0.1f, float mutationStrength = 0.1f) => aiModel.Mutate(mutationRate, mutationStrength);
+
+    public static int CompareFitness(KartBrain a, KartBrain b) => (a.Fitness > b.Fitness) ? 1 : ((a.Fitness < b.Fitness) ? -1 : 0);
+
+    private RayCastSensors rayCastSensors;
+    private AIFitness aiFitness;
 }
