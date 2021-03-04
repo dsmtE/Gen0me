@@ -65,7 +65,11 @@ public class TrainingManager : MonoBehaviour {
 			brainsList[i].ResetFitness();
 		}
 
-        // Mutate all
+		for (int i = 0; i < brainsList.Count; i++) {
+			brainsList[i].ResetFitness();
+		}
+
+		// Mutate all
 		/*
         foreach (KartBrain brain in brainsList) {
 			brain.MutateModel(mutationRate, mutationStrength);
