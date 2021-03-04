@@ -16,7 +16,7 @@ public class CheckpointManager : MonoBehaviour
             var obj = Instantiate(checkpoint);
             obj.transform.parent = gameObject.transform;
             obj.GetComponent<Checkpoint>().index = i;
-            obj.transform.localScale = new Vector3(circuitMesh.roadWidth * 2.0f, 1, 1);
+            obj.transform.localScale = new Vector3(circuitMesh.roadWidth * 3.0f, 1, 1);
             obj.transform.localPosition = pathCreator.path.GetPointAtTime(i / (float)nbCheckpoints);
             obj.transform.rotation = Quaternion.FromToRotation(Vector3.right, pathCreator.path.GetNormalAtDistance(pathCreator.path.length * i / (float)nbCheckpoints));
         }

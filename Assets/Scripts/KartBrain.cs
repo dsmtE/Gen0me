@@ -23,8 +23,8 @@ public class KartBrain : MonoBehaviour {
     private void Update() {
         var hits = rayCastSensors.GetHitInformations();
         var output = aiModel.eval(hits.Select(hit => hit.distance).ToArray());
-        kartController.ApplyAcceleration(output[0] * 0.5f + 0.5f);
-        kartController.Steer(output[1]);
+        kartController.ApplyAcceleration(output[0]);
+        kartController.Steer(output[1] * 2.0f - 1.0f);
     }
 
     public void ValidateCheckpoint(int checkpointIdx) {
