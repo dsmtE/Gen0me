@@ -12,6 +12,7 @@ public class Layer {
     public ActivationFunct activationFunct;
 
     public static ActivationFunct Sigmoid = (float value) => 1.0f / (1.0f + Mathf.Exp(-value));
+    public static ActivationFunct Relu = (float value) => Mathf.Max(0, value);
 
     public Layer(int inputDimension, int outputDimension, ActivationFunct activationFunct = null) {
         
@@ -22,10 +23,10 @@ public class Layer {
         biases = new float[outputDimension];
         this.activationFunct = activationFunct;
 
-        for (int i = 0; i < inputDimension; ++i) {
+        for (int i = 0; i < weights.Length; ++i) {
             weights[i] = Random.Range(-1, 1);
         }
-        for (int i = 0; i < outputDimension; ++i) {
+        for (int i = 0; i < biases.Length; ++i) {
             biases[i] = Random.Range(-1, 1);
         }
     }
@@ -56,6 +57,38 @@ public class Layer {
         }
 
         return res;
+    }
+
+
+    public void Crossover(Layer other, float keepeingRate = 0.5f) {
+        Assert.AreEqual(weights.Length, other.weights.Length, "Both layers must share the same weights size to be mixed.");
+        Assert.AreEqual(biases.Length, other.biases.Length, "Both layers must share the same biases size to be mixed.");
+
+        for (int i = 0; i < weights.Length; ++i) {
+            if (Random.value < keepeingRate) {
+                weights[i] = other.weights[i];
+            }
+        }
+
+        for (int i = 0; i < biases.Length; ++i) {
+            if (Random.value < keepeingRate) {
+                biases[i] = other.biases[i];
+            }
+        }
+    }
+
+    public void Mutate(float mutationRate = 0.1f, float mutationStrength = 0.1f) {
+        for (int i = 0; i < weights.Length; ++i) {
+            if (Random.value < mutationRate) {
+                weights[i] += Random.value * mutationStrength;
+            }
+        }
+
+        for (int i = 0; i < biases.Length; ++i) {
+            if (Random.value < mutationRate) {
+                biases[i] += Random.value * mutationStrength;
+            }
+        }
     }
 
     private float[] weights;
@@ -90,6 +123,11 @@ public class AIModel {
         }
         return res;
     }
+    public void Mutate(float mutationRate = 0.1f, float mutationStrength = 0.1f) {
+        for (int i = 0; i < layers.Count; ++i) {
+            layers[i].Mutate(mutationRate, mutationStrength);
+        }
+    }
 
-private List<Layer> layers;
+    private List<Layer> layers;
 }
