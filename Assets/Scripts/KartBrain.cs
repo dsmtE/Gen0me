@@ -11,6 +11,7 @@ public class KartBrain : MonoBehaviour {
     private RayCastSensors rayCastSensors;
 
     private AIModel aiModel;
+    private AIFitness aiFitness;
 
     private void Awake() {
         kartController = GetComponent<KartController>();
@@ -18,6 +19,7 @@ public class KartBrain : MonoBehaviour {
         rayCastSensors.RaysNumber = 3;
         int intermediateLayerDimension = 4;
         aiModel = new AIModel(rayCastSensors.RaysNumber, intermediateLayerDimension);
+        aiFitness = new AIFitness(CheckpointManager.nbCheckpoints);
     }
 
     private void Update() {
@@ -27,5 +29,9 @@ public class KartBrain : MonoBehaviour {
         kartController.Steer(output[1]);
     }
 
+    public void ValidateCheckpoint(int checkpointIdx)
+    {
+        aiFitness.valideCheckpoint(checkpointIdx);
+    }
     
 }
