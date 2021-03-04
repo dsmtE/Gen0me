@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public delegate float ActivationFunct(float x);
 
@@ -116,7 +117,9 @@ public class AIModel {
     }
 
     public static AIModel Crossover(AIModel a, AIModel b) {
-        Assert.AreEqual(a.layersDim, b.layersDim, "Both models must share the same architecture to be mixed.");
+        if(!a.layersDim.SequenceEqual(b.layersDim)) {
+            Debug.LogError("Both models must share the same architecture to be mixed.");
+        }
         AIModel res = new AIModel(a.layersDim);
         for (int i = 0; i < res.layers.Count; ++i) {
             res.layers[i] = Layer.Crossover(a.layers[i], b.layers[i]);
