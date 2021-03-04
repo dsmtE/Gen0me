@@ -1043,8 +1043,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77169f8617d44d24cb11946f0c70d48e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raysPerDirection: 4
-  maxRayDegrees: 60
+  raysPerDirection: 6
+  maxRayDegrees: 80
   rayLength: 100
   rayOrientation: {x: 0, y: 180, z: 0}
   startOffset: {x: -0.82, y: 0.22, z: 0}

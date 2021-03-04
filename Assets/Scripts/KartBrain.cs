@@ -14,8 +14,8 @@ public class KartBrain : MonoBehaviour {
     private void Awake() {
         kartController = GetComponent<KartController>();
         rayCastSensors = GetComponent<RayCastSensors>();
-        rayCastSensors.RaysNumber = 3;
-        int[] layersDim = new int[] { rayCastSensors.RaysNumber, 4, 2 };
+        rayCastSensors.RaysNumber = 2*6+1;
+        int[] layersDim = new int[] { rayCastSensors.RaysNumber, 10, 5, 2 };
         aiModel = new AIModel(layersDim);
         aiFitness = new AIFitness(CheckpointManager.nbCheckpoints);
     }
@@ -30,6 +30,13 @@ public class KartBrain : MonoBehaviour {
     public void ValidateCheckpoint(int checkpointIdx) {
         aiFitness.valideCheckpoint(checkpointIdx);
     }
+
+#if UNITY_EDITOR
+    void OnDrawGizmos() {
+        UnityEditor.Handles.color = Color.white;
+        UnityEditor.Handles.Label(transform.position + 1f * Vector3.up, "F: " + Fitness.ToString());
+    }
+#endif
 
     public void MutateModel(float mutationRate = 0.1f, float mutationStrength = 0.1f) => aiModel.Mutate(mutationRate, mutationStrength);
 
