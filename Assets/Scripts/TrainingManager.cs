@@ -18,12 +18,12 @@ public class TrainingManager : MonoBehaviour {
     private void Awake() {
         spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
 
-        brainsList = new List<KartBrain>(entitiesNumber);
+        brainsList = new List<KartBrain>();
 
         for(int i = 0; i < entitiesNumber; ++i) {
             GameObject go = Instantiate(kartPrefab, Vector3.zero, Quaternion.identity);
             go.transform.parent = gameObject.transform;
-            brainsList[i] = go.GetComponentInChildren<KartBrain>();
+            brainsList.Add(go.GetComponentInChildren<KartBrain>());
         }
 
 		generation = 0;
@@ -59,12 +59,15 @@ public class TrainingManager : MonoBehaviour {
 			KartBrain parent2 = ChooseParent();
 
 			brainsList[i].aiModel = AIModel.Crossover(parent1.aiModel, parent2.aiModel);
+
+			brainsList[i].MutateModel(mutationRate, mutationStrength);
 		}
 
         // Mutate all
+		/*
         foreach (KartBrain brain in brainsList) {
 			brain.MutateModel(mutationRate, mutationStrength);
-		}
+		}*/
 
 		++generation;
 
