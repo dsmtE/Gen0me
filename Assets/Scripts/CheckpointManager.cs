@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class CheckpointManager : MonoBehaviour {
-    public static int nbCheckpoints = 200;
+    public static int nbCheckpoints = 100;
     public GameObject checkpointPrefab;
     public CircuitMesh circuitMesh;
     public PathCreation.PathCreator pathCreator;
