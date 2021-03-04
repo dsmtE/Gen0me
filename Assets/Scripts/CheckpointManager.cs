@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class CheckpointManager : MonoBehaviour
 {
-    public static int nbCheckpoints = 20;
+    public static int nbCheckpoints = 200;
     public GameObject checkpoint;
     public CircuitMesh circuitMesh;
+    public PathCreation.PathCreator pathCreator;
 
     void Start()
     {
@@ -14,7 +15,9 @@ public class CheckpointManager : MonoBehaviour
         {
             var obj = Instantiate(checkpoint);
             obj.GetComponent<Checkpoint>().index = i;
-            obj.transform.localScale = new Vector3(31.25f * circuitMesh.roadWidth, 1, 1);
+            obj.transform.localScale = new Vector3(circuitMesh.roadWidth * 2.0f, 1, 1);
+            obj.transform.localPosition = pathCreator.path.GetPointAtTime(i / (float)nbCheckpoints);
+            obj.transform.rotation = Quaternion.FromToRotation(Vector3.right, pathCreator.path.GetNormalAtDistance(pathCreator.path.length * i / (float)nbCheckpoints));
         }
     }
 }
