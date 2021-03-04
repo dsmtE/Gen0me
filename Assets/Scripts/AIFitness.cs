@@ -5,6 +5,7 @@ using UnityEngine;
 public class AIFitness
 {
     private int[] validatedCheckpoints;
+    private float malus = 0;
 
     public AIFitness(int nbCheckpoints)
     {
@@ -17,11 +18,15 @@ public class AIFitness
         {
             if (validatedCheckpoints[validatedCheckpoints.Length - 1] == validatedCheckpoints[0])
                 validatedCheckpoints[0]++;
+            else
+                malus += 1;
         }
         else
         {
             if (validatedCheckpoints[index-1] == validatedCheckpoints[index] + 1)
                 validatedCheckpoints[index]++;
+            else
+                malus += 1;
         }
     }
 
@@ -32,6 +37,6 @@ public class AIFitness
         {
             score += nb_laps;
         }
-        return score;
+        return score - malus;
     }
 }
