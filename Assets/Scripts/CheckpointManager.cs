@@ -6,6 +6,7 @@ public class CheckpointManager : MonoBehaviour
 {
     public static int nbCheckpoints = 20;
     public GameObject checkpoint;
+    public CircuitMesh circuitMesh;
 
     void Start()
     {
@@ -13,6 +14,7 @@ public class CheckpointManager : MonoBehaviour
         {
             var obj = Instantiate(checkpoint);
             obj.GetComponent<Checkpoint>().index = i;
+            obj.transform.localScale = new Vector3(31.25f * circuitMesh.roadWidth, 1, 1);
         }
     }
 }
