@@ -1,11 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Linq;
@@ -40,7 +35,7 @@ public class TrainingManager : MonoBehaviour {
             GameObject go = Instantiate(kartPrefab, Vector3.zero, Quaternion.identity);
             go.transform.parent = gameObject.transform;
             brainsList.Add(go.GetComponentInChildren<KartBrain>());
-        }
+		}
 
 		generation = 0;
 	}

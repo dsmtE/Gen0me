@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using PathCreation;
 using PathCreation.Examples;
 using PathCreation.Utility;
@@ -35,6 +35,10 @@ public class CircuitMesh : PathSceneTool {
     Mesh wallsMesh;
     MeshCollider wallsMeshCollider;
 
+    public void UpdatePath(PathCreation.PathCreator path) {
+        pathCreator = path;
+        PathUpdated();
+    }
     protected override void PathUpdated() {
         if (pathCreator != null) {
             AssignMeshComponents();
@@ -235,8 +239,13 @@ public class CircuitMesh : PathSceneTool {
     void AssignRoadMeshComponents() {
 
         if (roadMeshHolder == null) {
-            roadMeshHolder = new GameObject("Road Mesh Holder");
-            roadMeshHolder.transform.parent = this.GetComponent<Transform>();
+            Transform find = transform.Find("Road Mesh Holder");
+            if(find != null) {
+                roadMeshHolder = transform.Find("Road Mesh Holder").gameObject;
+            }else {
+                roadMeshHolder = new GameObject("Road Mesh Holder");
+                roadMeshHolder.transform.parent = transform;
+            }
         }
 
         roadMeshHolder.transform.rotation = Quaternion.identity;
@@ -269,8 +278,13 @@ public class CircuitMesh : PathSceneTool {
     void AssignWallsMeshComponents() {
 
         if (wallsMeshHolder == null) {
-            wallsMeshHolder = new GameObject("walls Mesh Holder");
-            wallsMeshHolder.transform.parent = this.GetComponent<Transform>();
+            Transform find = transform.Find("Walls Mesh Holder");
+            if (find != null) {
+                wallsMeshHolder = transform.Find("Walls Mesh Holder").gameObject;
+            } else {
+                wallsMeshHolder = new GameObject("Walls Mesh Holder");
+                wallsMeshHolder.transform.parent = transform;
+            }
         }
 
         wallsMeshHolder.transform.rotation = Quaternion.identity;
