@@ -8,15 +8,11 @@ public class TrainingManager : MonoBehaviour {
 	[Tooltip("number of cars that we should consider as elite and keep for the next generation")]
 	public int elitKeepCount = 4;
 
-	public float mutationRate = 0.1f;
-	public float mutationStrength = 0.1f;
-
-	[Tooltip("in seconds")] public float trainingTime = 10.0f;
+	[SerializeField] private float mutationRate = 0.1f;
+	[SerializeField] private float mutationStrength = 0.1f;
+	[SerializeField, Tooltip("in seconds")] private float trainingTime = 10.0f;
 
 	[SerializeField] private GameObject kartPrefab;
-
-	[HideInInspector] private float bestFitness = 0;
-	[HideInInspector] public int generation;
 
 	private void Awake() {
         spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
@@ -35,12 +31,13 @@ public class TrainingManager : MonoBehaviour {
     private void Start() {
 		genertionStartTime = Time.time;
         SpawnKart();
-
 	}
 
     private void FixedUpdate() {
-		if (Time.time - genertionStartTime > trainingTime) {
-			NewGeneration();
+		if (enableTraining) {
+			if (Time.time - genertionStartTime > trainingTime) {
+				NewGeneration();
+			}
 		}
 		ComputeBestFiness();
 	}
@@ -84,14 +81,32 @@ public class TrainingManager : MonoBehaviour {
 	}
 
 	public string getInfos() {
-		return string.Format("Best Fitness: {0}\nGeneration: {1}\nTraining time: {2}/{3}", 
+		if (enableTraining) {
+			return string.Format("Best Fitness: {0}\nGeneration: {1}\nTraining time: {2}/{3}",
 			bestFitness.ToString("F2"), generation, (Time.time - genertionStartTime).ToString("F2"), trainingTime);
+		}else {
+			return string.Format("Best Fitness: {0}\nGeneration: {1}", bestFitness.ToString("F2"), generation);
+        }
 	}
 
+	// setters
+	public void EnableTraining(bool v) {
+		enableTraining = v;
+		NewGeneration();
+	}
+	public void SetMutationRate(float v) => mutationRate = v;
+	public void SetMutationStrength(float v) => mutationStrength = v;
+	public void SetTrainingTime(float v) => trainingTime = v;
+
+
+	private int generation;
 	private Transform SelectRandomSpawnpoint() => spawnPoints[Random.Range(0, spawnPoints.Length)].transform;
 	private KartBrain ChooseParent() => brainsList[Random.Range(0, elitKeepCount)];
 
 	private List<KartBrain> brainsList;
     private GameObject[] spawnPoints;
 	private float genertionStartTime;
+
+	private float bestFitness = 0;
+	private bool enableTraining = true;
 }
