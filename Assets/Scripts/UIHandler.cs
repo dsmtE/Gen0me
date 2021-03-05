@@ -51,6 +51,16 @@ public class UIHandler : MonoBehaviour {
         trainingManager.Load(filesNames[filesDropdown.value]);
     }
 
+    public void Del() {
+        string path = Application.persistentDataPath + "/" + filesNames[filesDropdown.value] + ".aiModel";
+        if (File.Exists(path)) {
+            File.Delete(path);
+            Debug.LogErrorFormat("model {0} deleted.", filesNames[filesDropdown.value]);
+        } else {
+            Debug.LogErrorFormat("the file {0} doesn't exist !", path);
+        }
+        UpdateDropDownList();
+    }
 
     private List<string> filesNames;
 
