@@ -2,6 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Linq;
+
+[System.Serializable]
+public struct SaveState {
+	public AIModel aiModel;
+
+    public SaveState(AIModel aiModel) {
+        this.aiModel = aiModel;
+    }
+}
+
 public class TrainingManager : MonoBehaviour {
 
     public int entitiesNumber = 20;
@@ -86,6 +103,41 @@ public class TrainingManager : MonoBehaviour {
 			bestFitness.ToString("F2"), generation, (Time.time - genertionStartTime).ToString("F2"), trainingTime);
 		}else {
 			return string.Format("Best Fitness: {0}\nGeneration: {1}", bestFitness.ToString("F2"), generation);
+        }
+	}
+
+
+	public void Save(string fileName) {
+
+		brainsList.Sort(KartBrain.CompareFitness);
+
+		SaveState saveState = new SaveState(brainsList[0].aiModel);
+
+		BinaryFormatter bf = new BinaryFormatter();
+		string layerDimStr = string.Join("_", saveState.aiModel.layersDim.Select(i => i.ToString()).ToArray());
+		string fileRelativePath = "/" + fileName + "_" + layerDimStr + ".aiModel";
+		FileStream file = File.Create(Application.persistentDataPath + fileRelativePath);
+		Debug.LogFormat("saved to {0}", Application.persistentDataPath + fileRelativePath);
+		bf.Serialize(file, saveState);
+		file.Close();
+	}
+
+	public void Load(string fileName) {
+
+		string fileRelativePath = "/" + fileName + ".aiModel";
+		if (File.Exists(Application.persistentDataPath + fileRelativePath)) {
+			BinaryFormatter bf = new BinaryFormatter();
+			FileStream file = File.Open(Application.persistentDataPath + fileRelativePath, FileMode.Open);
+			SaveState loaded = (SaveState)bf.Deserialize(file);
+			Debug.LogFormat("loaded from {0}", Application.persistentDataPath + fileRelativePath);
+			file.Close();
+
+			for (int i = 0; i < brainsList.Count; i++) {
+				brainsList[i].SetModel(loaded.aiModel);
+			}
+			NewGeneration();
+		}else {
+			Debug.LogErrorFormat("the file {0} doesn't exist !", fileRelativePath);
         }
 	}
 

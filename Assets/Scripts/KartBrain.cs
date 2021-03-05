@@ -32,6 +32,12 @@ public class KartBrain : MonoBehaviour {
         aiFitness.valideCheckpoint(checkpointIdx);
     }
 
+    public void SetModel(AIModel model) {
+        aiModel = model;
+        rayCastSensors.RaysNumber = aiModel.layersDim[0];
+        aiFitness.Reset();
+    }
+
 #if UNITY_EDITOR
     void OnDrawGizmos() {
         UnityEditor.Handles.color = Color.white;

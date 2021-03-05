@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 using System.Linq;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public delegate float ActivationFunct(float x);
 
-
+[System.Serializable]
 public class Layer {
 
     public ActivationFunct activationFunct;
@@ -94,8 +96,9 @@ public class Layer {
 
     private float[] weights;
     private float[] biases;
-} 
+}
 
+[System.Serializable]
 public class AIModel {
     public int[] layersDim;
 
