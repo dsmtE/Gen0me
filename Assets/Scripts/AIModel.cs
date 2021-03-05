@@ -27,10 +27,10 @@ public class Layer {
         this.activationFunct = activationFunct;
 
         for (int i = 0; i < weights.Length; ++i) {
-            weights[i] = Random.Range(-1, 1);
+            weights[i] = Random.Range(-0.1f, 0.1f);
         }
         for (int i = 0; i < biases.Length; ++i) {
-            biases[i] = Random.Range(-1, 1);
+            biases[i] = Random.Range(-0.1f, 0.1f);
         }
     }
 
