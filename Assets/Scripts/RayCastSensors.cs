@@ -52,7 +52,6 @@ public class RayCastSensors : MonoBehaviour {
                 raysPerDirection = 0;
                 Debug.Log("[Warning] RayNumber can't be less than one.");
             }
-            Debug.LogFormat("raysPerDirection: {0} from value : {1}", raysPerDirection, value);
         }
     }
 

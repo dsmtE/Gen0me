@@ -15,7 +15,10 @@ public class TrainingManager : MonoBehaviour {
 
 	[SerializeField] private GameObject kartPrefab;
 
-    private void Awake() {
+	[HideInInspector] private float bestFitness = 0;
+	[HideInInspector] public int generation;
+
+	private void Awake() {
         spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
 
         brainsList = new List<KartBrain>();
@@ -39,7 +42,14 @@ public class TrainingManager : MonoBehaviour {
 		if (Time.time - genertionStartTime > trainingTime) {
 			NewGeneration();
 		}
+		ComputeBestFiness();
 	}
+
+	private void ComputeBestFiness() {
+        foreach (KartBrain brain in brainsList) {
+			bestFitness = Mathf.Max(bestFitness, brain.Fitness);
+		}
+    }
 
     private void SpawnKart() {
 		foreach (KartBrain kb in brainsList) {
@@ -61,30 +71,26 @@ public class TrainingManager : MonoBehaviour {
 			brainsList[i].aiModel = AIModel.Crossover(parent1.aiModel, parent2.aiModel);
 
 			brainsList[i].MutateModel(mutationRate, mutationStrength);
-
-			brainsList[i].ResetFitness();
 		}
 
-		for (int i = 0; i < brainsList.Count; i++) {
+		for (int i = 0; i < brainsList.Count; ++i) {
 			brainsList[i].ResetFitness();
 		}
-
-		// Mutate all
-		/*
-        foreach (KartBrain brain in brainsList) {
-			brain.MutateModel(mutationRate, mutationStrength);
-		}*/
 
 		++generation;
-
+		bestFitness = 0;
 		genertionStartTime = Time.time;
 		SpawnKart();
+	}
+
+	public string getInfos() {
+		return string.Format("Best Fitness: {0}\nGeneration: {1}\nTraining time: {2}/{3}", 
+			bestFitness.ToString("F2"), generation, (Time.time - genertionStartTime).ToString("F2"), trainingTime);
 	}
 
 	private Transform SelectRandomSpawnpoint() => spawnPoints[Random.Range(0, spawnPoints.Length)].transform;
 	private KartBrain ChooseParent() => brainsList[Random.Range(0, elitKeepCount)];
 
-	private int generation;
 	private List<KartBrain> brainsList;
     private GameObject[] spawnPoints;
 	private float genertionStartTime;
