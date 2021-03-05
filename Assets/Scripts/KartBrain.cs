@@ -15,8 +15,8 @@ public class KartBrain : MonoBehaviour {
     private void Awake() {
         kartController = GetComponent<KartController>();
         rayCastSensors = GetComponent<RayCastSensors>();
-        rayCastSensors.RaysNumber = 2*1+1;
-        int[] layersDim = new int[] { rayCastSensors.RaysNumber, 12, 2 };
+        rayCastSensors.RaysNumber = 2*4+1;
+        int[] layersDim = new int[] { rayCastSensors.RaysNumber, 2 };
         aiModel = new AIModel(layersDim);
         aiFitness = new AIFitness();
     }
