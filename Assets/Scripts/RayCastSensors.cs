@@ -15,7 +15,7 @@ public class RayCastSensors : MonoBehaviour {
 
     [Range(1, 1000)]
     [Tooltip("Length of the rays to cast.")]
-    [SerializeField] private float rayLength = 20f;
+    [SerializeField] public float rayLength = 20f;
 
     [Tooltip("Starting rays orientation")]
     [SerializeField] private Vector3 rayOrientation = Vector3.zero;

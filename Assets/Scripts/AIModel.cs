@@ -83,13 +83,13 @@ public class Layer {
     public void Mutate(float mutationRate = 0.1f, float mutationStrength = 0.1f) {
         for (int i = 0; i < weights.Length; ++i) {
             if (Random.value < mutationRate) {
-                weights[i] += Random.value * mutationStrength;
+                weights[i] += (Random.value * 2 - 1) * mutationStrength;
             }
         }
 
         for (int i = 0; i < biases.Length; ++i) {
             if (Random.value < mutationRate) {
-                biases[i] += Random.value * mutationStrength;
+                biases[i] += (Random.value * 2 - 1) * mutationStrength;
             }
         }
     }

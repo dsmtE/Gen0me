@@ -1021,9 +1021,9 @@ MonoBehaviour:
   kartNormal: {fileID: 3137537922403377517}
   sphere: {fileID: 3137537921078816491}
   maxSpeed: 50
-  bakingForce: 1
+  bakingForce: 2
   acceleration: 10
-  steering: 30
+  steering: 40
   gravity: 10
   layerMask:
     serializedVersion: 2
@@ -1044,10 +1044,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raysPerDirection: 6
-  maxRayDegrees: 80
-  rayLength: 100
+  maxRayDegrees: 85
+  rayLength: 80
   rayOrientation: {x: 0, y: 180, z: 0}
-  startOffset: {x: -0.82, y: 1.22, z: 0}
+  startOffset: {x: -0.82, y: 0.37, z: 0}
   endOffset: {x: 0, y: 0, z: 0}
   rayLayerMask:
     serializedVersion: 2
@@ -1068,6 +1068,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kartController: {fileID: 0}
+  aiModel:
+    layersDim: 
 --- !u!1 &3137537922403377426
 GameObject:
   m_ObjectHideFlags: 0
